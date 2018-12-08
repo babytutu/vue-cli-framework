@@ -32,7 +32,7 @@
       <div slot="header">
         <span>插入static文件夹下文件[使用相对public的路径]</span>
       </div>
-      <img alt="logo" src="/static/images/logo.png" />
+      <img alt="logo" src="static/images/logo.png" />
       {{code}}
     </el-card>
     <div class="blank"></div>
@@ -41,7 +41,52 @@
         <span>http请求</span>
         {{http}}
       </div>
-      <pre>{{res}}</pre>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>天气预报</span>
+          <el-select v-model="city" placeholder="请选择" @change="getData" class="select-city">
+            <el-option
+              v-for="item in citys"
+              :key="item.code"
+              :label="item.name"
+              :value="item.code">
+            </el-option>
+          </el-select>
+          <el-button style="float: right; padding: 3px 0" type="text" @click="getData"><i class="el-icon-refresh"></i></el-button>
+        </div>
+        <el-table
+          :data="weather.forecast"
+          style="width: 100%">
+          <el-table-column
+            prop="ymd"
+            label="日期"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="week"
+            label="日期"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="type"
+            label="天气"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="high"
+            label="最高温度">
+          </el-table-column>
+          <el-table-column
+            prop="low"
+            label="最低温度">
+          </el-table-column>
+          <el-table-column
+            prop="notice"
+            label="注意"
+            min-width="200">
+          </el-table-column>
+        </el-table>
+      </el-card>
     </el-card>
     <div class="blank"></div>
     <el-card class="box-card">
@@ -63,7 +108,7 @@ export default {
   data () {
     return {
       res: '',
-      code: '<img alt="logo" src="/static/images/logo.png" />',
+      code: '<img alt="logo" src="static/images/logo.png" />',
       http: 'this.$axios.get(url)',
       plugins: [{
         name: 'axios',
@@ -173,19 +218,45 @@ export default {
             ]
           }
         }
-      }
+      },
+      weather: {
+        city: '',
+        province: '',
+        forecast: []
+      },
+      city: '101210101',
+      citys: [
+        {
+          name: '北京',
+          code: '101010100'
+        },
+        {
+          name: '上海',
+          code: '101020100'
+        },
+        {
+          name: '杭州',
+          code: '101210101'
+        },
+      ]
     }
+  },
+  created () {
+    this.getData()
   },
   mounted () {
     this.drawLine()
-    this.$axios.get('https://www.anapioficeandfire.com/api/').then(res => {
-      this.res = res
-    })
   },
   methods: {
+    /**
+     * 新开页面打开
+     */
     handleClick (url) {
       window.open(url)
     },
+    /**
+     * 绘制曲线图
+     */
     drawLine () {
       // 基于准备好的dom，初始化echarts实例
       let line = this.$echarts.init(document.getElementById('line'))
@@ -195,6 +266,35 @@ export default {
       line.setOption(this.echarts.line.option)
       bar.setOption(this.echarts.bar.option)
       pie.setOption(this.echarts.pie.option)
+    },
+    /**
+     * 获取天气数据
+     */
+    getData () {
+      this.$axios.get(this.$apis.weather + this.city).then(res => {
+        if (res.status === 200) {
+          this.$message.success('天气预报信息获取成功')
+          this.res = res
+          const {
+            cityInfo: {
+              city,
+              parent: province
+            },
+            data: {
+              forecast
+            }
+          } = res
+          this.weather = {
+            city,
+            province,
+            forecast
+          }
+        } else {
+          this.$message.error('天气预报信息获取失败')
+        }
+      }).catch(() => {
+        this.$message.error('天气预报信息获取失败')
+      })
     }
   }
 }
@@ -204,10 +304,13 @@ export default {
   width: 900px;
   margin: 0 auto;
   padding-top: 200px;
-  background: url('/static/images/logo.png') top no-repeat;
+  background: url('~static/images/logo.png') top no-repeat;
   .blank{
     height 20px
     width 100%
+  }
+  .select-city{
+    margin-left 10px
   }
 }
 </style>
