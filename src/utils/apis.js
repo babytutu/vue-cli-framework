@@ -1,3 +1,6 @@
 export const apis = {
-  weather: 'http://t.weather.sojson.com/api/weather/city/'
+  weather: '//t.weather.sojson.com/api/weather/city/',
+  iceandfire: {
+    books: 'https://www.anapioficeandfire.com/api/books'
+  }
 }

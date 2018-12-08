@@ -41,52 +41,44 @@
         <span>http请求</span>
         {{http}}
       </div>
-      <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span>天气预报</span>
-          <el-select v-model="city" placeholder="请选择" @change="getData" class="select-city">
-            <el-option
-              v-for="item in citys"
-              :key="item.code"
-              :label="item.name"
-              :value="item.code">
-            </el-option>
-          </el-select>
-          <el-button style="float: right; padding: 3px 0" type="text" @click="getData"><i class="el-icon-refresh"></i></el-button>
-        </div>
-        <el-table
-          :data="weather.forecast"
-          style="width: 100%">
-          <el-table-column
-            prop="ymd"
-            label="日期"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="week"
-            label="日期"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="type"
-            label="天气"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="high"
-            label="最高温度">
-          </el-table-column>
-          <el-table-column
-            prop="low"
-            label="最低温度">
-          </el-table-column>
-          <el-table-column
-            prop="notice"
-            label="注意"
-            min-width="200">
-          </el-table-column>
-        </el-table>
-      </el-card>
+      <h4>books-iceandfire</h4>
+      <el-table
+        v-loading="loading"
+        :data="books"
+        style="width: 100%">
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <el-form label-position="left" label-width="120px">
+              <el-form-item label="mediaType">
+                <span>{{ props.row.mediaType }}</span>
+              </el-form-item>
+              <el-form-item label="pages">
+                <span>{{ props.row.numberOfPages }}</span>
+              </el-form-item>
+              <el-form-item label="isbn">
+                <span>{{ props.row.isbn }}</span>
+              </el-form-item>
+            </el-form>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="name"
+          width="200">
+        </el-table-column>
+        <el-table-column
+          prop="authors"
+          label="authors">
+        </el-table-column>
+        <el-table-column
+          prop="released"
+          label="released">
+        </el-table-column>
+        <el-table-column
+          prop="publisher"
+          label="publisher">
+        </el-table-column>
+      </el-table>
     </el-card>
     <div class="blank"></div>
     <el-card class="box-card">
@@ -107,7 +99,6 @@ export default {
   name: 'home',
   data () {
     return {
-      res: '',
       code: '<img alt="logo" src="static/images/logo.png" />',
       http: 'this.$axios.get(url)',
       plugins: [{
@@ -219,26 +210,9 @@ export default {
           }
         }
       },
-      weather: {
-        city: '',
-        province: '',
-        forecast: []
-      },
-      city: '101210101',
-      citys: [
-        {
-          name: '北京',
-          code: '101010100'
-        },
-        {
-          name: '上海',
-          code: '101020100'
-        },
-        {
-          name: '杭州',
-          code: '101210101'
-        },
-      ]
+      books: [],
+      detail: {},
+      loading: true
     }
   },
   created () {
@@ -268,34 +242,22 @@ export default {
       pie.setOption(this.echarts.pie.option)
     },
     /**
-     * 获取天气数据
+     * 获取数据
      */
     getData () {
-      this.$axios.get(this.$apis.weather + this.city).then(res => {
-        if (res.status === 200) {
-          this.$message.success('天气预报信息获取成功')
-          this.res = res
-          const {
-            cityInfo: {
-              city,
-              parent: province
-            },
-            data: {
-              forecast
-            }
-          } = res
-          this.weather = {
-            city,
-            province,
-            forecast
-          }
+      this.$axios.get(this.$apis.iceandfire.books).then(res => {
+        if (res && res.length) {
+          this.$message.success('信息获取成功')
+          this.books = res
         } else {
-          this.$message.error('天气预报信息获取失败')
+          this.$message.error('信息获取失败')
         }
+        this.loading = false
       }).catch(() => {
-        this.$message.error('天气预报信息获取失败')
+        this.loading = false
+        this.$message.error('信息获取失败')
       })
-    }
+    },
   }
 }
 </script>
@@ -308,9 +270,6 @@ export default {
   .blank{
     height 20px
     width 100%
-  }
-  .select-city{
-    margin-left 10px
   }
 }
 </style>
