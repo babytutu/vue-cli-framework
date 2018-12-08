@@ -22,6 +22,12 @@ npm run build
 npm run lint
 ```
 
+### 发布站点
+```
+npm run deploy
+```
+
+
 ## 插件说明
 
 | 名称 | 描述 | 参考资料 |
@@ -57,7 +63,7 @@ bar.setOption(this.echarts.line.option)
 ### 插入static文件夹下文件[使用相对public的路径]
 
 ```html
-<img alt="logo" src="/static/images/logo.png" />
+<img alt="logo" src="static/images/logo.png" />
 ```
 
 ## 目录结构
@@ -86,6 +92,7 @@ bar.setOption(this.echarts.line.option)
 ```
 
 ## 参考文档
-[vue官方文档](https://cn.vuejs.org/v2/guide/)
-[vue-cli配置](https://cli.vuejs.org/config/)
+
+- [vue官方文档](https://cn.vuejs.org/v2/guide/)
+- [vue-cli配置](https://cli.vuejs.org/config/)
 
