@@ -35,6 +35,7 @@ npm run deploy
 | axios | http请求工具 | [GitHub](https://github.com/axios/axios) |
 | echarts | 精简版图表（线性/柱状/饼） | [GitHub](https://github.com/apache/incubator-echarts) [WebSite](http://echarts.baidu.com/) |
 | element-ui | 饿了么样式组件库 | [GitHub](https://github.com/ElemeFE/element) [WebSite](http://element-cn.eleme.io/#/zh-CN/component/installation) |
+| 牛牛截图 | 截图插件简单封装 | [WebSite](http://www.ggniu.cn/) |
 
 ### 挂载vue原型链的方法
 
@@ -42,6 +43,29 @@ npm run deploy
 Vue.prototype.$axios = _axios
 Vue.prototype.$echarts = echarts
 ```
+
+### 牛牛截图
+
+```js
+<template>
+  <niuniu v-model="img">
+    <el-button size="small">点击体验截图</el-button>
+  </niuniu>
+</template>
+
+import niuniu from '@/components/niuniu.vue'
+export default {
+  data () {
+    return {
+      img: ''
+    }
+  },
+  components: {
+    niuniu
+  },
+}
+```
+
 
 ### axios
 
