@@ -47,8 +47,8 @@ function rgb2value(r, g, b) {
 }
 
 
-function onpluginLoaded() {
-  this.pluginLoaded(false);
+function isIE () { //ie?
+  return !!window.ActiveXObject || "ActiveXObject" in window
 }
 
 function NiuniuCaptureObject() {
@@ -92,14 +92,16 @@ function NiuniuCaptureObject() {
 
   this.FinishedCallback = null;
   this.PluginLoadedCallback = null;
-  this.VersionCallback = null;
+  this.VersionCallback = function (ver) {
+    console.log(ver)
+  };
   this.OnConnectFailed = function (isReconnect) {
     self.WriteLog(isReconnect ? "reconnect failed, the capture control process is exit." : "connect failed at the first time.");
   }
 
   this.LoadPlugin = function () {
     var obj = document.getElementById('capturecontainer')
-    obj.innerHTML = '<object id="niuniuCapture" type="application/x-niuniuwebcapture" width="0" height="0"><param name="onload" value="onpluginLoaded" /></object>';
+    obj.innerHTML = '<object id="niuniuCapture" type="application/x-niuniuwebcapture" width="0" height="0"></object>';
   }
 
   this.niuniuCapture = function () {
@@ -258,6 +260,10 @@ function NiuniuCaptureObject() {
 
   this.InitNiuniuCapture = function () {
     self.LoadPlugin();
+    // 如果是ie就执行初始化
+    if (isIE()) {
+      self.pluginLoaded(false)
+    }
     setTimeout(self.InitWebSocketAndBindCallback(), 200);
   }
 
@@ -372,9 +378,9 @@ function NiuniuCaptureObject() {
   this.WriteLog = function (txt) {
     //写日志
     try {
-    //   console.log(txt);
+      // console.log(txt);
     } catch (e) {
-
+      // console.error(e);
     }
   }
 
@@ -550,7 +556,7 @@ function NiuniuCaptureObject() {
       return;
     }
     var verSion = self.niuniuCapture().GetVersion();
-	self.VersionCallback(verSion);
+	  self.VersionCallback(verSion);
     self.WriteLog(verSion);
   }
 }

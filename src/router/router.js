@@ -10,10 +10,5 @@ export default new Router({
       name: 'demo',
       component: () => import(/* webpackChunkName: "demo" */ '@/views/demo.vue')
     },
-    {
-      path: '/niuniu',
-      name: 'niuniu',
-      component: () => import(/* webpackChunkName: "niuniu" */ '@/views/niuniu.vue')
-    },
   ]
 })
