@@ -36,6 +36,17 @@
       {{code}}
     </el-card>
     <div class="blank"></div>
+    <el-card>
+      <div slot="header">
+        <span>牛牛截图演示</span>
+      </div>
+      <niuniu v-model="img">
+         <el-button size="small">点击体验截图</el-button>
+      </niuniu>
+      <div class="blank"></div>
+      <img :src="img" v-if="img" />
+    </el-card>
+    <div class="blank"></div>
     <el-card class="box-card">
       <div slot="header">
         <span>http请求</span>
@@ -95,10 +106,16 @@
   </div>
 </template>
 <script>
+import niuniu from '@/components/niuniu.vue'
+
 export default {
   name: 'home',
+  components: {
+    niuniu
+  },
   data () {
     return {
+      img: '',
       code: '<img alt="logo" src="static/images/logo.png" />',
       http: 'this.$axios.get(url)',
       plugins: [{
@@ -121,6 +138,13 @@ export default {
         version: '2.4.5',
         website: 'http://element-cn.eleme.io/#/zh-CN/component/installation',
         github: 'https://github.com/ElemeFE/element'
+      },
+      {
+        name: '牛牛截图',
+        desc: '截图插件简单封装',
+        version: '1.0.0.0',
+        website: 'http://www.ggniu.cn',
+        github: ''
       },
       ],
       echarts: {
