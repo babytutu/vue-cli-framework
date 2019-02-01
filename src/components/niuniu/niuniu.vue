@@ -1,12 +1,20 @@
 <template>
-  <div class="niuniu">
-    <div @click="StartCapture"><slot>截图</slot></div>
-    <div id="downloadNotice" v-html="info"></div>
+  <div>
+    <div @click="StartCapture"><slot></slot></div>
     <div id="capturecontainer" style="height:0px;width:0px;"></div>
     <iframe id="startCaptureFrame" style="display:none;"></iframe>
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible">
+      <span>如果超过5秒无响应，请点此<a target="_blank" :href="downloadUrl">安装截图插件</a></span>
+    </el-dialog>
   </div>
 </template>
 <script>
+/**
+ * 牛牛截图控件Web版本 更新日期：2018-05-09
+ * @see http://www.ggniu.cn/testcapture.htm
+ */
 import niuniu from 'static/niuniu/niuniucapture'
 
 export default {
@@ -15,7 +23,7 @@ export default {
     return {
       downloadUrl: 'static/niuniu/CaptureInstall.exe?',
       captureObj: {},
-      info: '',
+      dialogVisible: false,
     }
   },
   mounted () {
@@ -43,7 +51,7 @@ export default {
      * 下载插件
      */
     ShowDownLoad () {
-      this.info = `如果超过5秒无响应，请点此<a target="_blank" href="${this.downloadUrl}">安装</a>`
+      this.dialogVisible = true
     },
     /**
      * 开始截图
@@ -65,7 +73,13 @@ export default {
         return
       }
       if (content) {
-        this.$emit('input', 'data:image/jpeg;base64,' + content)
+        const imgObj = 'data:image/jpg;base64,' + content
+        let img = new Image()
+        img.src = imgObj
+        img.style.width = '130px'
+        img.setAttribute('data-id', content)
+        img.setAttribute('data-imgurl', content)
+        this.$emit('capture-finished', imgObj, img)
       }
 
       var str = {
@@ -74,21 +88,6 @@ export default {
         3: '您保存了截图到本地',
       }
       console.log(str[type])
-    },
-    /**
-     * 当提示安装控件后，需要重新加载控件来使用截图；
-     * 也有部分是需要刷新浏览器的
-     */
-    ReloadPlugin () {
-      this.captureObj.LoadPlugin()
-      if (this.captureObj.pluginValid()) {
-        this.info = '截图控件已经安装完毕，您可以进行截图了。'
-      } else {
-        this.info = '截图控件未能识别到'
-        // var browserInfo = "查看控件是否被浏览器阻止，或通过浏览器设置中的加载项查看NiuniuCapture是否加载并正常运行"
-        // console.log('截图控件未能识别到，请按如下步骤检查:<br/>1. 确定您已经下载控件安装包并正常安装 <br/>2. ' + browserInfo +
-        //   '<br/>3. 刷新页面或重新启动浏览器试下')
-      }
     },
   },
 }

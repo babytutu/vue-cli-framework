@@ -101,11 +101,11 @@ function NiuniuCaptureObject() {
 
   this.LoadPlugin = function () {
     var obj = document.getElementById('capturecontainer')
-    obj.innerHTML = '<object id="niuniuCapture" type="application/x-niuniuwebcapture" width="0" height="0"></object>';
+    obj.innerHTML = '<object id="niuniuCapture" type="application/x-niuniuwebcapture" width="0" height="0"></object>'
   }
 
   this.niuniuCapture = function () {
-    return document.getElementById('niuniuCapture');
+    return document.getElementById('niuniuCapture')
   }
 
   this.addEvent = function (obj, name, func) {
@@ -119,10 +119,12 @@ function NiuniuCaptureObject() {
   this.pluginValid = function () {
     try {
       if (self.niuniuCapture().valid) {
-        return true;
+        return true
       }
-    } catch (e) {}
-    return false;
+    } catch (e) {
+      // console.log(e)
+    }
+    return false
   }
 
   this.OnCaptureFinished = function (x, y, width, height, content, localpath) {

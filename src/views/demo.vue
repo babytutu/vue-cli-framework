@@ -30,6 +30,13 @@
     <div class="blank"></div>
     <el-card class="box-card">
       <div slot="header">
+        <span>音频播放</span>
+      </div>
+      <vaplayer :music="music" :autoplay="false"></vaplayer>
+    </el-card>
+    <div class="blank"></div>
+    <el-card class="box-card">
+      <div slot="header">
         <span>插入static文件夹下文件[使用相对public的路径]</span>
       </div>
       <img alt="logo" src="static/images/logo.png" />
@@ -40,11 +47,11 @@
       <div slot="header">
         <span>牛牛截图演示</span>
       </div>
-      <niuniu v-model="img">
+      <niuniu @capture-finished="captureFinished">
          <el-button size="small">点击体验截图</el-button>
       </niuniu>
       <div class="blank"></div>
-      <img :src="img" v-if="img" />
+      <div id="imgContainer"></div>
     </el-card>
     <div class="blank"></div>
     <el-card class="box-card">
@@ -106,7 +113,7 @@
   </div>
 </template>
 <script>
-import niuniu from '@/components/niuniu.vue'
+import niuniu from '@/components/niuniu/niuniu.vue'
 
 export default {
   name: 'home',
@@ -115,7 +122,11 @@ export default {
   },
   data () {
     return {
-      img: '',
+      music: {
+        title: 'wav文件测试',
+        artist: 'test',
+        src: 'http://10.0.12.78/recorderfileserver/resources/Free-Converter.com-2019-01-30_07-08-23_6000_6003-63522623.wav'
+      },
       code: '<img alt="logo" src="static/images/logo.png" />',
       http: 'this.$axios.get(url)',
       plugins: [{
@@ -145,6 +156,13 @@ export default {
         version: '1.0.0.0',
         website: 'http://www.ggniu.cn',
         github: ''
+      },
+      {
+        name: 'vue-aplayer',
+        desc: '音频播放简单封装',
+        version: '5.8.0',
+        website: 'https://vue-aplayer.js.org',
+        github: 'https://github.com/SevenOutman/vue-aplayer'
       },
       ],
       echarts: {
@@ -244,6 +262,12 @@ export default {
     this.drawLine()
   },
   methods: {
+    /**
+     * 插入截图插件返回的图片元素
+     */
+    captureFinished (url, img) {
+      document.getElementById('imgContainer').append(img)
+    },
     /**
      * 新开页面打开
      */
