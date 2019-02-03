@@ -51,7 +51,7 @@
          <el-button size="small">点击体验截图</el-button>
       </niuniu>
       <div class="blank"></div>
-      <div id="imgContainer"></div>
+      <img :src="imgUrl" v-if="imgUrl" />
     </el-card>
     <div class="blank"></div>
     <el-card class="box-card">
@@ -60,6 +60,7 @@
         {{http}}
       </div>
       <h4>books-iceandfire</h4>
+      <el-button @click="getData">获取数据</el-button>
       <el-table
         v-loading="loading"
         :data="books"
@@ -122,10 +123,11 @@ export default {
   },
   data () {
     return {
+      imgUrl: '',
       music: {
-        title: 'wav文件测试',
-        artist: 'test',
-        src: 'http://10.0.12.78/recorderfileserver/resources/Free-Converter.com-2019-01-30_07-08-23_6000_6003-63522623.wav'
+        title: '最清晰的声音',
+        artist: '孙子涵',
+        src: 'http://122.228.254.5/mp3.9ku.com/mp3/183/182127.mp3'
       },
       code: '<img alt="logo" src="static/images/logo.png" />',
       http: 'this.$axios.get(url)',
@@ -252,11 +254,8 @@ export default {
       },
       books: [],
       detail: {},
-      loading: true
+      loading: false,
     }
-  },
-  created () {
-    this.getData()
   },
   mounted () {
     this.drawLine()
@@ -266,7 +265,7 @@ export default {
      * 插入截图插件返回的图片元素
      */
     captureFinished (url, img) {
-      document.getElementById('imgContainer').append(img)
+      this.imgUrl = url
     },
     /**
      * 新开页面打开
@@ -291,6 +290,7 @@ export default {
      * 获取数据
      */
     getData () {
+      this.loading = true
       this.$axios.get(this.$apis.iceandfire.books).then(res => {
         if (res && res.length) {
           this.$message.success('信息获取成功')
