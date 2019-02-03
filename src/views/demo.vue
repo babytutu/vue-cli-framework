@@ -48,10 +48,10 @@
         <span>牛牛截图演示</span>
       </div>
       <niuniu @capture-finished="captureFinished">
-         <el-button size="small">点击体验截图</el-button>
+        <el-button size="small">点击体验截图</el-button>
       </niuniu>
       <div class="blank"></div>
-      <div id="imgContainer"></div>
+      <img :src="imgUrl" v-if="imgUrl" />
     </el-card>
     <div class="blank"></div>
     <el-card class="box-card">
@@ -60,13 +60,14 @@
         {{http}}
       </div>
       <h4>books-iceandfire</h4>
-      <el-table
-        v-loading="loading"
-        :data="books"
-        style="width: 100%">
+      <el-button @click="getData">获取数据</el-button>
+      <el-table v-loading="loading"
+                :data="books"
+                style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
-            <el-form label-position="left" label-width="120px">
+            <el-form label-position="left"
+                     label-width="120px">
               <el-form-item label="mediaType">
                 <span>{{ props.row.mediaType }}</span>
               </el-form-item>
@@ -79,22 +80,18 @@
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="name"
-          label="name"
-          width="200">
+        <el-table-column prop="name"
+                         label="name"
+                         width="200">
         </el-table-column>
-        <el-table-column
-          prop="authors"
-          label="authors">
+        <el-table-column prop="authors"
+                         label="authors">
         </el-table-column>
-        <el-table-column
-          prop="released"
-          label="released">
+        <el-table-column prop="released"
+                         label="released">
         </el-table-column>
-        <el-table-column
-          prop="publisher"
-          label="publisher">
+        <el-table-column prop="publisher"
+                         label="publisher">
         </el-table-column>
       </el-table>
     </el-card>
@@ -104,11 +101,11 @@
         <span>echarts</span>
       </div>
       <div id="line"
-          :style="{width: '900px', height: '300px'}"></div>
+           :style="{width: '900px', height: '300px'}"></div>
       <div id="bar"
-          :style="{width: '900px', height: '300px'}"></div>
+           :style="{width: '900px', height: '300px'}"></div>
       <div id="pie"
-          :style="{width: '900px', height: '300px'}"></div>
+           :style="{width: '900px', height: '300px'}"></div>
     </el-card>
   </div>
 </template>
@@ -123,9 +120,9 @@ export default {
   data () {
     return {
       music: {
-        title: 'wav文件测试',
-        artist: 'test',
-        src: 'http://10.0.12.78/recorderfileserver/resources/Free-Converter.com-2019-01-30_07-08-23_6000_6003-63522623.wav'
+        title: '最清晰的声音',
+        artist: '孙子涵',
+        src: 'http://122.228.254.5/mp3.9ku.com/mp3/183/182127.mp3'
       },
       code: '<img alt="logo" src="static/images/logo.png" />',
       http: 'this.$axios.get(url)',
@@ -214,49 +211,59 @@ export default {
             legend: {
               show: true
             },
-            series: [
+            series: [{
+              name: '访问来源',
+              type: 'pie',
+              radius: ['50%', '70%'],
+              avoidLabelOverlap: false,
+              label: {
+                normal: {
+                  show: false,
+                  position: 'center'
+                },
+                emphasis: {
+                  show: true,
+                  textStyle: {
+                    fontSize: '30',
+                    fontWeight: 'bold'
+                  }
+                }
+              },
+              labelLine: {
+                normal: {
+                  show: false
+                }
+              },
+              data: [{
+                value: 335,
+                name: '直接访问'
+              },
               {
-                name: '访问来源',
-                type: 'pie',
-                radius: ['50%', '70%'],
-                avoidLabelOverlap: false,
-                label: {
-                  normal: {
-                    show: false,
-                    position: 'center'
-                  },
-                  emphasis: {
-                    show: true,
-                    textStyle: {
-                      fontSize: '30',
-                      fontWeight: 'bold'
-                    }
-                  }
-                },
-                labelLine: {
-                  normal: {
-                    show: false
-                  }
-                },
-                data: [
-                  { value: 335, name: '直接访问' },
-                  { value: 310, name: '邮件营销' },
-                  { value: 234, name: '联盟广告' },
-                  { value: 135, name: '视频广告' },
-                  { value: 1548, name: '搜索引擎' }
-                ]
+                value: 310,
+                name: '邮件营销'
+              },
+              {
+                value: 234,
+                name: '联盟广告'
+              },
+              {
+                value: 135,
+                name: '视频广告'
+              },
+              {
+                value: 1548,
+                name: '搜索引擎'
               }
-            ]
+              ]
+            }]
           }
         }
       },
       books: [],
       detail: {},
-      loading: true
+      loading: false,
+      imgUrl: ''
     }
-  },
-  created () {
-    this.getData()
   },
   mounted () {
     this.drawLine()
@@ -265,8 +272,8 @@ export default {
     /**
      * 插入截图插件返回的图片元素
      */
-    captureFinished (url, img) {
-      document.getElementById('imgContainer').append(img)
+    captureFinished (url) {
+      this.imgUrl = url
     },
     /**
      * 新开页面打开
@@ -291,6 +298,7 @@ export default {
      * 获取数据
      */
     getData () {
+      this.loading = true
       this.$axios.get(this.$apis.iceandfire.books).then(res => {
         if (res && res.length) {
           this.$message.success('信息获取成功')

@@ -87,7 +87,7 @@ export default {
         2: '您取消了截图',
         3: '您保存了截图到本地',
       }
-      console.log(str[type])
+      this.log(str[type])
     },
   },
 }
