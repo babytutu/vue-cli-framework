@@ -4,20 +4,18 @@
       <div slot="header">
         <span>插件列表</span>
       </div>
-      <el-table :data="plugins">
-        <el-table-column prop="name"
-                         label="名称"
-                         width="180">
-        </el-table-column>
-        <el-table-column prop="version"
-                         label="版本">
-        </el-table-column>
-        <el-table-column prop="desc"
-                         label="介绍"
-                         width="300">
-        </el-table-column>
+      <tableModel :data="plugins" @change="getDataList" :searchForm="searchForm" :rules="rules">
+        <template slot="search">
+          <el-form-item prop="pages" label="总数">
+            <el-input v-model.number="searchForm.pages" :maxlength="10"></el-input>
+          </el-form-item>
+          <el-form-item prop="name">
+            <el-input v-model.trim="searchForm.name" :maxlength="10"></el-input>
+          </el-form-item>
+        </template>
         <el-table-column label="文档"
-                         width="200">
+                         width="200"
+                         slot="right">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row.github)"
                        size="small">GitHub</el-button>
@@ -25,7 +23,7 @@
                        size="small">文档</el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </tableModel>
     </el-card>
     <div class="blank"></div>
     <el-card class="box-card">
@@ -115,11 +113,13 @@
 </template>
 <script>
 import niuniu from '@/components/niuniu/niuniu.vue'
+import tableModel from '@/components/table/table.vue'
 
 export default {
   name: 'home',
   components: {
-    niuniu
+    niuniu,
+    tableModel
   },
   data () {
     return {
@@ -131,42 +131,72 @@ export default {
       },
       code: '<img alt="logo" src="static/images/logo.png" />',
       http: 'this.$axios.get(url)',
-      plugins: [{
-        name: 'axios',
-        desc: 'http请求工具',
-        version: '0.18.0',
-        website: 'https://github.com/axios/axios',
-        github: 'https://github.com/axios/axios'
+      plugins: {
+        list: [
+          {
+            name: 'axios',
+            desc: 'http请求工具',
+            version: '0.18.0',
+            website: 'https://github.com/axios/axios',
+            github: 'https://github.com/axios/axios'
+          },
+          {
+            name: 'echarts',
+            desc: '精简版图表（线性/柱状/饼）',
+            version: '4.2.0-rc.2',
+            website: 'http://echarts.baidu.com/',
+            github: 'https://github.com/apache/incubator-echarts'
+          },
+          {
+            name: 'element-ui',
+            desc: '饿了么样式组件库',
+            version: '2.4.5',
+            website: 'http://element-cn.eleme.io/#/zh-CN/component/installation',
+            github: 'https://github.com/ElemeFE/element'
+          },
+          {
+            name: '牛牛截图',
+            desc: '截图插件简单封装',
+            version: '1.0.0.0',
+            website: 'http://www.ggniu.cn',
+            github: ''
+          },
+          {
+            name: 'vue-aplayer',
+            desc: '音频播放简单封装',
+            version: '5.8.0',
+            website: 'https://vue-aplayer.js.org',
+            github: 'https://github.com/SevenOutman/vue-aplayer'
+          },
+        ],
+        header: [
+          {
+            label: '名称',
+            key: 'name',
+          },
+          {
+            label: '版本',
+            key: 'version',
+          },
+          {
+            label: '介绍',
+            key: 'desc',
+          },
+        ]
       },
-      {
-        name: 'echarts',
-        desc: '精简版图表（线性/柱状/饼）',
-        version: '4.2.0-rc.2',
-        website: 'http://echarts.baidu.com/',
-        github: 'https://github.com/apache/incubator-echarts'
+      searchForm: {
+        pages: 180,
+        name: '',
+        total: 10,
+        current: 1,
+        pagesize: 10
       },
-      {
-        name: 'element-ui',
-        desc: '饿了么样式组件库',
-        version: '2.4.5',
-        website: 'http://element-cn.eleme.io/#/zh-CN/component/installation',
-        github: 'https://github.com/ElemeFE/element'
+      rules: {
+        pages: [
+          { required: true, message: '总数不能为空' },
+          { type: 'number', message: '总数必须为数字值' }
+        ]
       },
-      {
-        name: '牛牛截图',
-        desc: '截图插件简单封装',
-        version: '1.0.0.0',
-        website: 'http://www.ggniu.cn',
-        github: ''
-      },
-      {
-        name: 'vue-aplayer',
-        desc: '音频播放简单封装',
-        version: '5.8.0',
-        website: 'https://vue-aplayer.js.org',
-        github: 'https://github.com/SevenOutman/vue-aplayer'
-      },
-      ],
       echarts: {
         line: {
           option: {
@@ -257,10 +287,25 @@ export default {
       loading: false,
     }
   },
+  created () {
+    this.getDataList()
+  },
   mounted () {
     this.drawLine()
   },
   methods: {
+    /**
+     * 列表搜索
+     * @param {number} current page
+     * @param {string} pagesize pagesize
+     */
+    getDataList (current = 1, pagesize) {
+      this.searchForm.current = current
+      if (pagesize) this.searchForm.pagesize = pagesize
+      // 模拟接口返回
+      this.searchForm.total = this.searchForm.pages
+      console.log('getDataList')
+    },
     /**
      * 插入截图插件返回的图片元素
      */
