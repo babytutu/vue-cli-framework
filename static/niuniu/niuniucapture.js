@@ -427,7 +427,7 @@ function NiuniuCaptureObject() {
       }
     }
 
-    self.TimeOutID = setTimeout("self.connectHost();", 800);
+    self.TimeOutID = setTimeout(self.connectHost(), 800);
   }
 
   this.LoopEchoMessage = function () {
