@@ -4,18 +4,10 @@
       <div slot="header">
         <span>插件列表</span>
       </div>
-      <tableModel :data="plugins" @change="getDataList" :searchForm="searchForm" :rules="rules">
-        <template slot="search">
-          <el-form-item prop="pages" label="总数">
-            <el-input v-model.number="searchForm.pages" :maxlength="10"></el-input>
-          </el-form-item>
-          <el-form-item prop="name">
-            <el-input v-model.trim="searchForm.name" :maxlength="10"></el-input>
-          </el-form-item>
-        </template>
+      <tableModel :data="table">
         <el-table-column label="文档"
                          width="200"
-                         slot="right">
+                         slot="table-right">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row.github)"
                        size="small">GitHub</el-button>
@@ -24,6 +16,22 @@
           </template>
         </el-table-column>
       </tableModel>
+    </el-card>
+    <el-card class="box-card">
+      <div slot="header">
+        <span>表格表单整合</span>
+      </div>
+      <el-tabs type="border-card">
+        <el-tab-pane label="表格">
+          <tableDemo></tableDemo>
+        </el-tab-pane>
+        <el-tab-pane label="表单">
+          <formDemo></formDemo>
+        </el-tab-pane>
+        <el-tab-pane label="组件说明">
+          <descDemo></descDemo>
+        </el-tab-pane>
+      </el-tabs>
     </el-card>
     <div class="blank"></div>
     <el-card class="box-card">
@@ -41,7 +49,7 @@
       {{code}}
     </el-card>
     <div class="blank"></div>
-    <el-card>
+    <el-card class="box-card">
       <div slot="header">
         <span>牛牛截图演示</span>
       </div>
@@ -113,13 +121,17 @@
 </template>
 <script>
 import niuniu from '@/components/niuniu/niuniu.vue'
-import tableModel from '@/components/table/table.vue'
+import tableDemo from './table'
+import formDemo from './form'
+import descDemo from './desc'
 
 export default {
   name: 'home',
   components: {
     niuniu,
-    tableModel
+    tableDemo,
+    formDemo,
+    descDemo,
   },
   data () {
     return {
@@ -131,7 +143,7 @@ export default {
       },
       code: '<img alt="logo" src="static/images/logo.png" />',
       http: 'this.$axios.get(url)',
-      plugins: {
+      table: {
         list: [
           {
             name: 'axios',
@@ -182,20 +194,7 @@ export default {
             label: '介绍',
             key: 'desc',
           },
-        ]
-      },
-      searchForm: {
-        pages: 180,
-        name: '',
-        total: 10,
-        current: 1,
-        pagesize: 10
-      },
-      rules: {
-        pages: [
-          { required: true, message: '总数不能为空' },
-          { type: 'number', message: '总数必须为数字值' }
-        ]
+        ],
       },
       echarts: {
         line: {
@@ -287,25 +286,10 @@ export default {
       loading: false,
     }
   },
-  created () {
-    this.getDataList()
-  },
   mounted () {
     this.drawLine()
   },
   methods: {
-    /**
-     * 列表搜索
-     * @param {number} current page
-     * @param {string} pagesize pagesize
-     */
-    getDataList (current = 1, pagesize) {
-      this.searchForm.current = current
-      if (pagesize) this.searchForm.pagesize = pagesize
-      // 模拟接口返回
-      this.searchForm.total = this.searchForm.pages
-      console.log('getDataList')
-    },
     /**
      * 插入截图插件返回的图片元素
      */
@@ -354,7 +338,7 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .home{
-  width: 900px;
+  width: 90%;
   margin: 0 auto;
   padding-top: 200px;
   background: url('~static/images/logo.png') top no-repeat;
