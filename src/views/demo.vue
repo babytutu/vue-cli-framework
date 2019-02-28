@@ -155,14 +155,14 @@ export default {
           {
             name: 'echarts',
             desc: '精简版图表（线性/柱状/饼）',
-            version: '4.2.0-rc.2',
+            version: '4.0.0',
             website: 'http://echarts.baidu.com/',
             github: 'https://github.com/apache/incubator-echarts'
           },
           {
             name: 'element-ui',
             desc: '饿了么样式组件库',
-            version: '2.4.5',
+            version: '2.5.4',
             website: 'http://element-cn.eleme.io/#/zh-CN/component/installation',
             github: 'https://github.com/ElemeFE/element'
           },
@@ -176,7 +176,7 @@ export default {
           {
             name: 'vue-aplayer',
             desc: '音频播放简单封装',
-            version: '5.8.0',
+            version: '1.6.1',
             website: 'https://vue-aplayer.js.org',
             github: 'https://github.com/SevenOutman/vue-aplayer'
           },
