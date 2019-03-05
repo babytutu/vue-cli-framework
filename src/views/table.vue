@@ -12,6 +12,7 @@
         </template>
       </el-table-column>
     </tableModel>
+    <pre>{{table}}</pre>
   </div>
 </template>
 <script>
@@ -86,7 +87,10 @@ export default {
             label: '输入框',
             key: 'input',
             type: 'input',
-            maxlength: 10
+            maxlength: 10,
+            rules: [
+              { required: true, message: '不能为空' },
+            ]
           },
           {
             label: '单选框',
@@ -152,11 +156,6 @@ export default {
             label: '开关'
           }
         ],
-        rules: {
-          input: [
-            { required: true, message: '不能为空' },
-          ]
-        },
       },
       multiple: []
     }

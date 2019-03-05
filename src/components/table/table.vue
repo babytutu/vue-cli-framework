@@ -1,15 +1,16 @@
 <template>
   <el-container class="table-warper">
     <el-header :height="height">
-      <el-form :inline="inline" :ref="formName" :model="data.formData" :rules="data.rules" :label-width="labelWidth" v-if="data.formData">
+      <el-form :inline="inline" :ref="formName" :model="data.formData" :label-width="labelWidth" v-if="data.formData">
         <slot name="search-start"></slot>
-        <el-form-item :prop="key" :label="label" v-for="{
+        <el-form-item :prop="key" :rules="rules" :label="label" v-for="{
           label,
           key,
           placeholder,
           maxlength,
           type,
-          list
+          list,
+          rules
         } in data.form" :key="key">
           <template v-if="!type || type === 'input'">
             <el-input :placeholder="placeholder" clearable v-model.trim="data.formData[key]" :maxlength="maxlength || 32" class="form-input"></el-input>

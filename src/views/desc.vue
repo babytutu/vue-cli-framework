@@ -178,6 +178,12 @@ export default {
               type: 'Number',
               default: 32
             },
+            {
+              name: 'rules',
+              desc: '正则规则',
+              type: 'Array',
+              default: ''
+            },
             ],
             header: [{
               label: '名称',
@@ -197,12 +203,6 @@ export default {
             },
             ],
           },
-        },
-        {
-          name: 'rules',
-          desc: '验证规则',
-          type: 'Array',
-          default: '-'
         },
         {
           name: 'header',
