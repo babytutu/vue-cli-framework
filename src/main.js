@@ -12,12 +12,14 @@ import './style/style.styl'
 // 音频播放组件,全局注册，方便使用
 import vaplayer from '@/components/aplayer/VueAplayer.vue'
 import tableModel from '@/components/table/table.vue'
+import formModel from '@/components/table/form.vue'
 
 // 增加仅开发模式用的logger工具
 import Logger from './utils/logger'
 
 Vue.component('vaplayer', vaplayer)
 Vue.component('tableModel', tableModel)
+Vue.component('formModel', formModel)
 
 Vue.use(Logger)
 

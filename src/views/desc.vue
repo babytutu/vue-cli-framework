@@ -1,20 +1,13 @@
 <template>
   <div>
-    <h4>Slots</h4>
-    <tableModel :data="slotDesc"></tableModel>
-    <h4>Props</h4>
-    <tableModel :data="modelDesc"></tableModel>
-    <h4>Data参数说明</h4>
-    <tableModel :data="dataDesc">
-      <template slot="table-left">
-        <el-table-column type="expand">
-          <template slot-scope="props"
-                    v-if="props.row.expend">
-            <tableModel :data="props.row.expend"></tableModel>
-          </template>
-        </el-table-column>
-      </template>
-    </tableModel>
+    <h4>Table Slots</h4>
+    <tableModel :list="slotDesc.table" :header="slotDesc.header"></tableModel>
+    <h4>Table Props</h4>
+    <tableModel :list="tableDesc.list" :header="tableDesc.header"></tableModel>
+    <h4>Form Slots</h4>
+    <tableModel :list="slotDesc.form" :header="slotDesc.header"></tableModel>
+    <h4>Form Props</h4>
+    <tableModel :list="formDesc.list" :header="formDesc.header"></tableModel>
   </div>
 </template>
 <script>
@@ -22,22 +15,25 @@ export default {
   data () {
     return {
       slotDesc: {
-        list: [{
-          name: 'search-start',
-          desc: '搜索开始',
-        },
-        {
-          name: 'search-end',
-          desc: '搜索结束',
-        },
-        {
-          name: 'table-left',
-          desc: '表格插入前N列',
-        },
-        {
-          name: 'table-right',
-          desc: '表格插入后N列',
-        },
+        table: [
+          {
+            name: 'left',
+            desc: '表格插入前N列',
+          },
+          {
+            name: 'right',
+            desc: '表格插入后N列',
+          },
+        ],
+        form: [
+          {
+            name: 'search-start',
+            desc: '搜索开始',
+          },
+          {
+            name: 'search-end',
+            desc: '搜索结束',
+          },
         ],
         header: [{
           label: '名称',
@@ -49,67 +45,126 @@ export default {
         },
         ],
       },
-      modelDesc: {
-        list: [{
-          name: 'data',
-          desc: '表单表格信息',
-          type: 'Object',
-          default: '-'
+      tableDesc: {
+        list: [
+          {
+            name: 'formData',
+            desc: '分页相关信息',
+            type: 'Object',
+            default: JSON.stringify({
+              total: 100,
+              current: 1,
+              pagesize: 10
+            }),
+          },
+          {
+            name: 'list',
+            desc: '列表信息',
+            type: 'Object',
+            default: JSON.stringify([{
+              key: '表头名称对应值'
+            }])
+          },
+          {
+            name: 'header',
+            desc: '表头信息',
+            type: 'Array',
+            default: JSON.stringify([{
+              label: '表头名称', key: 'key'
+            }]),
+          },
+          {
+            name: 'selection',
+            desc: '是否含表格操作列',
+            type: 'Boolean',
+            default: 'false'
+          },
+          {
+            name: 'multipleSelection',
+            desc: '选中的列数',
+            type: 'Array',
+            default: '[]'
+          },
+          {
+            name: 'pageSizes',
+            desc: '分页默认参数',
+            type: 'Array',
+            default: '[10, 20, 30, 40]'
+          },
+        ],
+        header: [{
+          label: '名称',
+          key: 'name',
         },
         {
-          name: 'height',
-          desc: '搜索区域高度',
-          type: 'String',
-          default: '110'
+          label: '说明',
+          key: 'desc',
         },
         {
-          name: 'labelWidth',
-          desc: 'label宽度',
-          type: 'String',
-          default: '80px'
+          label: '类型',
+          key: 'type',
         },
         {
-          name: 'inline',
-          desc: '单行表单',
-          type: 'Boolean',
-          default: 'false'
+          label: '默认值',
+          key: 'default',
         },
-        {
-          name: 'selection',
-          desc: '表格操作列',
-          type: 'Boolean',
-          default: 'false'
-        },
-        {
-          name: 'multipleSelection',
-          desc: '选中的列数',
-          type: 'Array',
-          default: '-'
-        },
-        {
-          name: 'buttonText',
-          desc: '表单中左侧按钮名称',
-          type: 'String',
-          default: '查询'
-        },
-        {
-          name: 'resetText',
-          desc: '表单重置按钮名称',
-          type: 'String',
-          default: '重置'
-        },
-        {
-          name: 'pageSizes',
-          desc: '分页默认参数',
-          type: 'Array',
-          default: '[10, 20, 30, 40]'
-        },
-        {
-          name: 'formName',
-          desc: '组件内表单名称',
-          type: 'String',
-          default: 'table-model-searchForm'
-        },
+        ],
+      },
+      formDesc: {
+        list: [
+          {
+            name: 'formData',
+            desc: '表格数据对象',
+            type: 'Object',
+            default: JSON.stringify({
+              name: 'hello'
+            })
+          },
+          {
+            name: 'form',
+            desc: '表单内容',
+            type: 'Array',
+            default: JSON.stringify({
+              placeholder: '请输入姓名',
+              label: '姓名',
+              key: 'name',
+              type: 'input',
+              maxlength: 10,
+              rules: [
+                { required: true, message: '姓名不能为空' },
+              ]
+            },)
+          },
+          {
+            name: 'labelWidth',
+            desc: 'label宽度',
+            type: 'String',
+            default: '80px'
+          },
+          {
+            name: 'inline',
+            desc: '单行表单',
+            type: 'Boolean',
+            default: 'false'
+          },
+          {
+            name: 'buttonText',
+            desc: '表单中左侧按钮名称',
+            type: 'String',
+            default: '查询'
+          },
+          {
+            name: 'resetText',
+            desc: '表单重置按钮名称',
+            type: 'String',
+            default: ''
+          },
+          {
+            name: 'formName',
+            desc: '组件内表单名称',
+            type: 'String',
+            default: 'form-model-searchForm'
+          },
         ],
         header: [{
           label: '名称',

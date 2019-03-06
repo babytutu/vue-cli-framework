@@ -1,6 +1,6 @@
 <template>
   <div>
-    <tableModel :data="form" @change="saveForm" :inline="false" buttonText="保存"></tableModel>
+    <formModel :formData="form.formData" :form="form.form" @change="saveForm" :inline="false" buttonText="保存"></formModel>
     <pre>{{form}}</pre>
   </div>
 </template>
@@ -10,7 +10,7 @@ export default {
     return {
       form: {
         formData: {
-          input: 180,
+          name: '',
           select: '',
           radio: 3,
           checkbox: [],
@@ -18,13 +18,13 @@ export default {
         },
         form: [
           {
-            placeholder: '请输入总数',
-            label: '输入框',
-            key: 'input',
+            placeholder: '请输入姓名',
+            label: '姓名',
+            key: 'name',
             type: 'input',
             maxlength: 10,
             rules: [
-              { required: true, message: '不能为空' },
+              { required: true, message: '姓名不能为空' },
             ]
           },
           {

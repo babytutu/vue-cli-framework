@@ -1,9 +1,10 @@
 <template>
   <div class="warper">
-    <tableModel :list="table.list" :header="table.header" :formData="table.formData" @change="getDataList">
+    <formModel :formData="table.formData" :form="table.form" @change="saveForm" :inline="true" buttonText="保存"></formModel>
+    <tableModel :list="table.list" :header="table.header" :formData="table.formData" @change="getDataList" @multipleSelection="multipleSelection" :multipleSelection="table.multiple" :selection="true">
       <el-table-column label="文档"
                         width="200"
-                        slot="right">
+                        slot="table-right">
         <template slot-scope="scope">
           <el-button @click="handleClick(scope.row.github)"
                       size="small">GitHub</el-button>
@@ -20,7 +21,13 @@ export default {
   data () {
     return {
       table: {
+        multiple: [],
         formData: {
+          input: 180,
+          select: '',
+          radio: 3,
+          checkbox: [],
+          switch: false,
           total: 100,
           current: 1,
           pagesize: 10
@@ -76,10 +83,93 @@ export default {
             key: 'desc',
           },
         ],
+        form: [
+          {
+            placeholder: '请输入总数',
+            label: '输入框',
+            key: 'input',
+            type: 'input',
+            maxlength: 10,
+            rules: [
+              { required: true, message: '不能为空' },
+            ]
+          },
+          {
+            label: '单选框',
+            key: 'radio',
+            type: 'radio',
+            list: [
+              {
+                value: 1,
+                label: '选项1'
+              },
+              {
+                value: 2,
+                label: '选项2'
+              },
+              {
+                value: 3,
+                label: '选项3'
+              },
+            ]
+          },
+          {
+            placeholder: '请选择',
+            label: '下拉菜单',
+            key: 'select',
+            type: 'select',
+            list: [
+              {
+                value: 1,
+                label: '选项1'
+              },
+              {
+                value: 2,
+                label: '选项2'
+              },
+              {
+                value: 3,
+                label: '选项3'
+              },
+            ]
+          },
+          {
+            label: '多选框',
+            key: 'checkbox',
+            type: 'checkbox',
+            list: [
+              {
+                value: 1,
+                label: '选项1'
+              },
+              {
+                value: 2,
+                label: '选项2'
+              },
+              {
+                value: 3,
+                label: '选项3'
+              },
+            ]
+          },
+          {
+            type: 'switch',
+            key: 'switch',
+            label: '开关'
+          }
+        ],
       },
     }
   },
   methods: {
+    /**
+     * 单选/多选操作
+     * @param {array} val 选中的对象数组
+     */
+    multipleSelection (val) {
+      console.log(val)
+      this.table.multiple = val
+    },
     /**
      * 列表搜索
      * @param {number} current page
@@ -92,6 +182,12 @@ export default {
       this.table.formData.total = Math.floor((Math.random() * 10) + 1) * 100
       console.log('getDataList', this.table.formData)
     },
+    /**
+     * 保存表单信息
+     */
+    saveForm () {
+      console.log(this.table.formData)
+    }
   },
 }
 </script>

@@ -4,10 +4,10 @@
       <div slot="header">
         <span>插件列表</span>
       </div>
-      <tableModel :data="table">
+      <tableModel :list="table.list" :header="table.header">
         <el-table-column label="文档"
                          width="200"
-                         slot="table-right">
+                         slot="right">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row.github)"
                        size="small">GitHub</el-button>
@@ -17,6 +17,7 @@
         </el-table-column>
       </tableModel>
     </el-card>
+    <div class="blank"></div>
     <el-card class="box-card">
       <div slot="header">
         <span>表格表单整合</span>
@@ -27,6 +28,9 @@
         </el-tab-pane>
         <el-tab-pane label="表单">
           <formDemo></formDemo>
+        </el-tab-pane>
+        <el-tab-pane label="表单+表格">
+          <formTableDemo></formTableDemo>
         </el-tab-pane>
         <el-tab-pane label="组件说明">
           <descDemo></descDemo>
@@ -124,6 +128,7 @@ import niuniu from '@/components/niuniu/niuniu.vue'
 import tableDemo from './table'
 import formDemo from './form'
 import descDemo from './desc'
+import formTableDemo from './formTable'
 
 export default {
   name: 'home',
@@ -131,6 +136,7 @@ export default {
     niuniu,
     tableDemo,
     formDemo,
+    formTableDemo,
     descDemo,
   },
   data () {
