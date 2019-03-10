@@ -20,6 +20,14 @@
     <div class="blank"></div>
     <el-card class="box-card">
       <div slot="header">
+        <span>音频播放</span>
+      </div>
+      <object v-if="isIE()" width="500px" height="150px" type="audio/x-wav" data="http://122.228.254.5/mp3.9ku.com/mp3/183/182127.mp3"></object>
+      <vaplayer v-else :music="music" :autoplay="false"></vaplayer>
+    </el-card>
+    <div class="blank"></div>
+    <el-card class="box-card">
+      <div slot="header">
         <span>表格表单整合</span>
       </div>
       <el-tabs type="border-card">
@@ -36,13 +44,6 @@
           <descDemo></descDemo>
         </el-tab-pane>
       </el-tabs>
-    </el-card>
-    <div class="blank"></div>
-    <el-card class="box-card">
-      <div slot="header">
-        <span>音频播放</span>
-      </div>
-      <vaplayer :music="music" :autoplay="false"></vaplayer>
     </el-card>
     <div class="blank"></div>
     <el-card class="box-card">
@@ -296,6 +297,10 @@ export default {
     this.drawLine()
   },
   methods: {
+    isIE () {
+      console.log(!!window.ActiveXObject)
+      return !!window.ActiveXObject || 'ActiveXObject' in window
+    },
     /**
      * 插入截图插件返回的图片元素
      */
