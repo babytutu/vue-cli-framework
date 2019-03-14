@@ -1,18 +1,24 @@
 <template>
-  <el-container class="form-warper">
-    <el-form :inline="inline" :ref="formName" :model="formData" :label-width="labelWidth">
-      <slot name="search-start"></slot>
+  <div class="form-warper">
+    <el-form :inline="inline" :ref="formName" :model="formData" :label-width="labelWidth" :label-position="labelPosition">
+      <slot name="start"></slot>
       <el-form-item :prop="key" :rules="rules" :label="label" v-for="{
         label,
         key,
         placeholder,
-        maxlength,
+        maxlength = 32,
         type,
         list,
-        rules
+        rules,
+        dateType,
+        width,
+        desc,
+        size = 'medium',
+        isRange,
+        className
       } in form" :key="key">
         <template v-if="!type || type === 'input'">
-          <el-input :placeholder="placeholder" clearable v-model.trim="formData[key]" :maxlength="maxlength || 32" class="form-input"></el-input>
+          <el-input :type="dateType || 'text'" :size="size" :placeholder="placeholder" clearable v-model.trim="formData[key]" :maxlength="maxlength" :style="{width}"></el-input>
         </template>
         <template v-if="type === 'radio'">
           <el-radio-group v-model="formData[key]">
@@ -23,7 +29,7 @@
           </el-radio-group>
         </template>
         <template v-if="type === 'select'">
-          <el-select v-model="formData[key]" clearable :placeholder="placeholder">
+          <el-select :size="size" :style="{width}" v-model="formData[key]" clearable :placeholder="placeholder">
             <el-option
               v-for="{
                 value,
@@ -50,15 +56,43 @@
             v-model="formData[key]"
             :name="label">
           </el-switch>
+          <span class="switch-desc">{{desc}}</span>
+        </template>
+        <template v-if="type === 'date'">
+          <el-date-picker
+            :size="size"
+            v-model="formData[key]"
+            :type="dateType"
+            :style="{width}"
+            :placeholder="placeholder">
+          </el-date-picker>
+        </template>
+        <template v-if="type === 'time'">
+          <el-time-picker
+            :size="size"
+            v-model="formData[key]"
+            :is-range="isRange"
+            :class="className"
+            :placeholder="placeholder">
+          </el-time-picker>
         </template>
       </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="searchData">{{buttonText}}</el-button>
-        <el-button @click="resetForm" v-if="resetText">{{resetText}}</el-button>
-        <slot name="search-end"></slot>
+      <slot name="end"></slot>
+      <el-form-item v-if="insideBtn">
+        <slot name="button-left"></slot>
+        <el-button size="medium" type="primary" @click="searchData">{{buttonText}}</el-button>
+        <el-button size="medium" @click="resetForm" v-if="resetText">{{resetText}}</el-button>
+        <slot name="button-right"></slot>
       </el-form-item>
+      <slot name="right"></slot>
     </el-form>
-  </el-container>
+    <div class="footer" v-if="!insideBtn">
+      <slot name="button-left"></slot>
+      <el-button size="medium" type="primary" @click="searchData">{{buttonText}}</el-button>
+      <el-button size="medium" @click="resetForm" v-if="resetText">{{resetText}}</el-button>
+      <slot name="button-right"></slot>
+    </div>
+  </div>
 </template>
 <script>
 export default {
@@ -76,6 +110,11 @@ export default {
     labelWidth: {
       type: String,
       default: '80px'
+    },
+    // label位置
+    labelPosition: {
+      type: String,
+      default: 'right'
     },
     // 表单中左侧按钮名称
     buttonText: {
@@ -97,6 +136,26 @@ export default {
       type: String,
       default: 'form-model-searchForm'
     },
+    // 底部按钮在form内，左对齐
+    insideBtn: {
+      type: Boolean,
+      default: true
+    },
+    // 是否重置表单，对话框中的表单使用
+    reset: {
+      type: Boolean,
+      default: false
+    },
+  },
+  watch: {
+    /**
+     * 监听值的变化，用于父组件触发初始化表单
+     */
+    reset(newValue) {
+      if (newValue) {
+        this.$refs[this.formName].resetFields()
+      }
+    }
   },
   methods: {
     /**
@@ -124,14 +183,16 @@ export default {
 }
 </script>
 <style scoped>
-.table-warper{
-  height: 100%;
+.switch-desc{
+  margin-left: 10px;
+  display: inline-block;
+  color: #999;
 }
-.pagination{
-  padding-top: 10px;
-  text-align: right;
+.footer {
+  padding-bottom: 20px;
+  text-align: center;
 }
-.form-input{
-  width: 200px;
+.form-warper{
+  padding: 20px 20px 0
 }
 </style>

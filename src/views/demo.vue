@@ -22,8 +22,7 @@
       <div slot="header">
         <span>音频播放</span>
       </div>
-      <object v-if="isIE()" width="500px" height="150px" type="audio/x-wav" data="http://122.228.254.5/mp3.9ku.com/mp3/183/182127.mp3"></object>
-      <vaplayer v-else :music="music" :autoplay="false"></vaplayer>
+      <vaplayer :music="music" :list="list" :autoplay="false"></vaplayer>
     </el-card>
     <div class="blank"></div>
     <el-card class="box-card">
@@ -44,6 +43,16 @@
           <descDemo></descDemo>
         </el-tab-pane>
       </el-tabs>
+    </el-card>
+    <div class="blank"></div>
+    <el-card class="box-card">
+      <div slot="header">
+        <span>简易封装弹窗组件</span>
+      </div>
+      <el-button @click="showDialog">带确定按钮的弹窗</el-button>
+      <el-button @click="showPic">图片预览</el-button>
+      <confirm-dialog v-model="isShowDialog">带确定按钮的弹窗</confirm-dialog>
+      <pic-view title="图片预览" src="http://element-cn.eleme.io/static/guide.0a8462c.png" v-model="isShowPic">带确定按钮的弹窗</pic-view>
     </el-card>
     <div class="blank"></div>
     <el-card class="box-card">
@@ -125,16 +134,14 @@
   </div>
 </template>
 <script>
-import niuniu from '@/components/niuniu/niuniu.vue'
-import tableDemo from './table'
-import formDemo from './form'
-import descDemo from './desc'
-import formTableDemo from './formTable'
+import tableDemo from './demo/table'
+import formDemo from './demo/form'
+import descDemo from './demo/desc'
+import formTableDemo from './demo/formTable'
 
 export default {
   name: 'home',
   components: {
-    niuniu,
     tableDemo,
     formDemo,
     formTableDemo,
@@ -142,6 +149,8 @@ export default {
   },
   data () {
     return {
+      isShowDialog: false,
+      isShowPic: false,
       imgUrl: '',
       music: {
         title: '最清晰的声音',
@@ -297,9 +306,11 @@ export default {
     this.drawLine()
   },
   methods: {
-    isIE () {
-      console.log(!!window.ActiveXObject)
-      return !!window.ActiveXObject || 'ActiveXObject' in window
+    showDialog () {
+      this.isShowDialog = true
+    },
+    showPic () {
+      this.isShowPic = true
     },
     /**
      * 插入截图插件返回的图片元素

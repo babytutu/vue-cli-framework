@@ -1,20 +1,22 @@
 <template>
   <el-container class="table-warper">
     <el-main>
-      <el-table ref="multipleTable" :data="list" @selection-change="handleSelectionChange">
-        <el-table-column
-          v-if="selection"
-          type="selection"
-          width="55">
-        </el-table-column>
-        <slot name="left"></slot>
-        <el-table-column v-for="{ label, key } in header"
-                        :key="key"
-                        :prop="key"
-                        :label="label">
-        </el-table-column>
-        <slot name="right"></slot>
-      </el-table>
+      <slot name="table">
+        <el-table ref="multipleTable" :data="list" @selection-change="handleSelectionChange">
+          <el-table-column
+            v-if="selection"
+            type="selection"
+            width="55">
+          </el-table-column>
+          <slot name="left"></slot>
+          <el-table-column v-for="{ label, key } in header"
+                          :key="key"
+                          :prop="key"
+                          :label="label">
+          </el-table-column>
+          <slot name="right"></slot>
+        </el-table>
+      </slot>
     </el-main>
     <el-footer>
       <div class="pagination" v-if="list && formData && formData.total">
@@ -56,7 +58,7 @@ export default {
     // 分页默认值
     pageSizes: {
       type: Array,
-      default: () => [10, 20, 30, 40]
+      default: () => [10, 20, 50, 100]
     },
     // 选中的列数
     multipleSelection: {
@@ -99,14 +101,8 @@ export default {
 }
 </script>
 <style scoped>
-.table-warper{
-  height: 100%;
-}
 .pagination{
   padding-top: 10px;
   text-align: right;
-}
-.form-input{
-  width: 200px;
 }
 </style>
