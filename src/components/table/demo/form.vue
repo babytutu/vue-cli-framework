@@ -1,13 +1,21 @@
 <template>
   <div>
     <formModel :formData="form.formData" :form="form.form" @change="saveForm" :inline="false" buttonText="保存"></formModel>
-    <pre>{{form}}</pre>
+    <el-collapse accordion>
+      <el-collapse-item>
+        <template slot="title">
+          code<i class="header-icon el-icon-info"></i>
+        </template>
+        <pre>{{form}}</pre>
+      </el-collapse-item>
+    </el-collapse>
   </div>
 </template>
 <script>
 export default {
   data () {
     return {
+      showCode: false,
       form: {
         formData: {
           name: '',

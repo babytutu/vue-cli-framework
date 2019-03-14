@@ -22,7 +22,7 @@
       <div slot="header">
         <span>音频播放</span>
       </div>
-      <vaplayer :music="music" :list="list" :autoplay="false"></vaplayer>
+      <vaplayer :music="music" :autoplay="false"></vaplayer>
     </el-card>
     <div class="blank"></div>
     <el-card class="box-card">
@@ -49,10 +49,14 @@
       <div slot="header">
         <span>简易封装弹窗组件</span>
       </div>
+      <el-button @click="showDialogForm">带表单的弹窗</el-button>
       <el-button @click="showDialog">带确定按钮的弹窗</el-button>
       <el-button @click="showPic">图片预览</el-button>
+      <el-dialog width="500px" title="带表单的弹窗" :visible.sync="isShowDialogForm">
+        <formModel :insideBtn="false" :reset="isShowDialogForm" :formData="form.formData" :form="form.form" @change="saveForm" :inline="false" buttonText="保存"></formModel>
+      </el-dialog>
       <confirm-dialog v-model="isShowDialog">带确定按钮的弹窗</confirm-dialog>
-      <pic-view title="图片预览" src="http://element-cn.eleme.io/static/guide.0a8462c.png" v-model="isShowPic">带确定按钮的弹窗</pic-view>
+      <pic-view title="图片预览" src="static/images/logo.png" v-model="isShowPic">带确定按钮的弹窗</pic-view>
     </el-card>
     <div class="blank"></div>
     <el-card class="box-card">
@@ -134,10 +138,10 @@
   </div>
 </template>
 <script>
-import tableDemo from './demo/table'
-import formDemo from './demo/form'
-import descDemo from './demo/desc'
-import formTableDemo from './demo/formTable'
+import tableDemo from '@/components/table/demo/table'
+import formDemo from '@/components/table/demo/form'
+import descDemo from '@/components/table/demo/desc'
+import formTableDemo from '@/components/table/demo/formTable'
 
 export default {
   name: 'home',
@@ -150,6 +154,7 @@ export default {
   data () {
     return {
       isShowDialog: false,
+      isShowDialogForm: false,
       isShowPic: false,
       imgUrl: '',
       music: {
@@ -210,6 +215,90 @@ export default {
             label: '介绍',
             key: 'desc',
           },
+        ],
+      },
+      form: {
+        formData: {
+          name: '',
+          select: '',
+          radio: 3,
+          checkbox: [],
+          switch: false,
+        },
+        form: [
+          {
+            placeholder: '请输入姓名',
+            label: '姓名',
+            key: 'name',
+            type: 'input',
+            maxlength: 10,
+            rules: [
+              { required: true, message: '姓名不能为空' },
+            ]
+          },
+          {
+            label: '单选框',
+            key: 'radio',
+            type: 'radio',
+            list: [
+              {
+                value: 1,
+                label: '选项1'
+              },
+              {
+                value: 2,
+                label: '选项2'
+              },
+              {
+                value: 3,
+                label: '选项3'
+              },
+            ]
+          },
+          {
+            placeholder: '请选择',
+            label: '下拉菜单',
+            key: 'select',
+            type: 'select',
+            list: [
+              {
+                value: 1,
+                label: '选项1'
+              },
+              {
+                value: 2,
+                label: '选项2'
+              },
+              {
+                value: 3,
+                label: '选项3'
+              },
+            ]
+          },
+          {
+            label: '多选框',
+            key: 'checkbox',
+            type: 'checkbox',
+            list: [
+              {
+                value: 1,
+                label: '选项1'
+              },
+              {
+                value: 2,
+                label: '选项2'
+              },
+              {
+                value: 3,
+                label: '选项3'
+              },
+            ]
+          },
+          {
+            type: 'switch',
+            key: 'switch',
+            label: '开关'
+          }
         ],
       },
       echarts: {
@@ -306,9 +395,27 @@ export default {
     this.drawLine()
   },
   methods: {
+    /**
+     * 保存表单信息
+     */
+    saveForm () {
+      console.log(this.form.formData)
+    },
+    /**
+     * 表单弹窗
+     */
+    showDialogForm () {
+      this.isShowDialogForm = true
+    },
+    /**
+     * 弹窗
+     */
     showDialog () {
       this.isShowDialog = true
     },
+    /**
+     * 图片预览
+     */
     showPic () {
       this.isShowPic = true
     },

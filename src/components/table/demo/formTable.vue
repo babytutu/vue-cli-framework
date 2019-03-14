@@ -1,6 +1,6 @@
 <template>
   <div class="warper">
-    <formModel :formData="table.formData" :form="table.form" @change="saveForm" buttonText="保存"></formModel>
+    <formModel :formData="table.formData" :form="table.form" @change="saveForm"></formModel>
     <tableModel :list="table.list" :header="table.header" :formData="table.formData" @change="getDataList" @multipleSelection="multipleSelection" :multipleSelection="table.multiple" :selection="true">
       <el-table-column label="文档"
                         width="200"
@@ -13,7 +13,14 @@
         </template>
       </el-table-column>
     </tableModel>
-    <pre>{{table}}</pre>
+    <el-collapse accordion>
+      <el-collapse-item>
+        <template slot="title">
+          code<i class="header-icon el-icon-info"></i>
+        </template>
+        <pre>{{table}}</pre>
+      </el-collapse-item>
+    </el-collapse>
   </div>
 </template>
 <script>

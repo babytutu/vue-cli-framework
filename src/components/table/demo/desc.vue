@@ -27,12 +27,24 @@ export default {
         ],
         form: [
           {
-            name: 'search-start',
+            name: 'start',
             desc: '搜索开始',
           },
           {
-            name: 'search-end',
+            name: 'end',
             desc: '搜索结束',
+          },
+          {
+            name: 'button-left',
+            desc: '按钮左侧',
+          },
+          {
+            name: 'button-right',
+            desc: '按钮右侧',
+          },
+          {
+            name: 'right',
+            desc: '表单右侧',
           },
         ],
         header: [{
@@ -157,13 +169,25 @@ export default {
             name: 'resetText',
             desc: '表单重置按钮名称',
             type: 'String',
-            default: ''
+            default: '重置'
           },
           {
             name: 'formName',
             desc: '组件内表单名称',
             type: 'String',
             default: 'form-model-searchForm'
+          },
+          {
+            name: 'insideBtn',
+            desc: '底部按钮在form内，左对齐',
+            type: 'Boolean',
+            default: 'true'
+          },
+          {
+            name: 'reset',
+            desc: '是否重置表单，对话框中的表单使用',
+            type: 'Boolean',
+            default: 'false'
           },
         ],
         header: [{

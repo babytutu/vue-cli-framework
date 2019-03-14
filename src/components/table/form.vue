@@ -124,7 +124,7 @@ export default {
     // 表单重置按钮名称
     resetText: {
       type: String,
-      default: ''
+      default: '重置'
     },
     // 单行表单
     inline: {
@@ -151,7 +151,7 @@ export default {
     /**
      * 监听值的变化，用于父组件触发初始化表单
      */
-    reset(newValue) {
+    reset (newValue) {
       if (newValue) {
         this.$refs[this.formName].resetFields()
       }

@@ -12,7 +12,14 @@
         </template>
       </el-table-column>
     </tableModel>
-    <pre>{{table}}</pre>
+    <el-collapse accordion>
+      <el-collapse-item>
+        <template slot="title">
+          code<i class="header-icon el-icon-info"></i>
+        </template>
+        <pre>{{table}}</pre>
+      </el-collapse-item>
+    </el-collapse>
   </div>
 </template>
 <script>
